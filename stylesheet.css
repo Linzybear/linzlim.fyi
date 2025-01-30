@@ -1,7 +1,7 @@
 html {
-    background: #222;
     color: #bbb;
     font-size: 0.9rem;
+    background: #222;
 }
 @media ( min-width: 500px ) {
     html {
@@ -16,10 +16,10 @@ body {
     margin: auto;
     line-height: 1.6;
     width: 100%;
-    padding: 24px 24px 0;
 }
 @media ( min-width: 500px ) {
-    body {
+    header,
+    section {
         max-width: 540px;
         padding: 48px;
     }
@@ -29,7 +29,12 @@ header {
     display: flex;
     gap: 20px;
     align-items: start;
+    margin: auto;
 }
+article {
+    background: #a0d4d5;
+}
+
 header h1,
 header p {
     margin: 0;
@@ -38,11 +43,7 @@ header img {
     border-radius: 50%;
     width: 92px;
 }
-section:first-of-type {
-    margin: 36px 0;
-}
 section {
-    margin: 60px 0;
 }
 h1, h2 {
     color: #eee;
@@ -102,6 +103,11 @@ section .row > div:first-child {
     height: auto;
     max-height: 90px;
     border-radius: 8px;
+}
+img.hero {
+    width: 100%;
+    height: auto;
+    display: block;
 }
 @media ( min-width: 500px ) {
     .gallery {
