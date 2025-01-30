@@ -22,16 +22,6 @@ body {
     line-height: 1.6;
     width: 100%;
 }
-@media ( min-width: 500px ) {
-    body {
-        background: #222;
-    }
-    header,
-    section {
-        max-width: 540px;
-        padding: 48px;
-    }
-}
 
 header {
     display: flex;
@@ -39,6 +29,18 @@ header {
     align-items: start;
     margin: auto;
     background: #222;
+    padding: 20px;
+}
+
+@media ( min-width: 500px ) {
+    body {
+        background: #222;
+    }
+    header,
+    section {
+        max-width: 540px;
+        padding: 30px;
+    }
 }
 article {
     background: #a0d4d5;
@@ -117,9 +119,17 @@ img.hero {
     width: 100%;
     height: auto;
     display: block;
+    height: 600px;
+    object-fit: cover;
 }
+
 @media ( min-width: 500px ) {
     .gallery {
         width: 375px;
+    }
+}
+@media ( min-width: 800px ) {
+    img.hero {
+        height: auto;
     }
 }
