@@ -15,9 +15,8 @@ html {
 }
 body {
     font-family: "Quicksand", serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-
+    font-optical-sizing: auto;
+    font-style: normal;
     margin: auto;
     line-height: 1.6;
     width: 100%;
@@ -26,7 +25,7 @@ body {
 header {
     display: flex;
     gap: 20px;
-    align-items: start;
+    align-items: center;
     margin: auto;
     background: #222;
     padding: 20px;
