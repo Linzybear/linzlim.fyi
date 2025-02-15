@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+html {
+    color: black;
+    font-size: 0.9rem;
+    background: #a0d4d5;
+}
+@media ( min-width: 500px ) {
+    html {
+        font-size: 1rem;
+    }
+}
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: "Quicksand", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    margin: auto;
+    line-height: 1.6;
+    width: 100%;
+}
+
+header {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin: auto;
+    background: white;
+    color: #222;
+    padding: 20px;
+}
+
+@media ( min-width: 500px ) {
+    body {
+        background: white;
+    }
+    header,
+    section {
+        max-width: 540px;
+    }
+}
+article {
+    background: white;
+}
+
+section {
+    margin: auto;
+}
+summary {
+    cursor: pointer;
+}
+summary h3,
+summary h2 {
+    display: inline-block;
+}
+details {
+    margin: 0 20px;
+}
+details summary {
+    padding: 0 0 30px;
+}
+section ~ section {
+    padding-top: 30px;
+}
+details p {
+    margin: 0;
+}
+details > div > div {
+    overflow: hidden;
+}
+header h1,
+header p {
+    margin: 0;
+}
+header img {
+    border-radius: 50%;
+    width: 92px;
+}
+h1 {
+    font-size: 1rem;
+    font-weight: normal;
+    margin: 0;
+}
+h2, h3 {
+    color: #222;
+    font-size: 1rem;
+    font-weight: normal;
+    margin: 0;
+}
+h1 {
+    font-size: 20px;
+}
+h2 {
+    font-weight: 400;
+    font-size: 1rem;
+}
+a {
+    color: #222;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+section .row {
+    margin-left: 16px;
+}
+@media ( min-width: 500px ) {
+    details > div {
+        display: flex;
+        align-items: flex-start;
+        gap: 50px;
+    }
+    section .row {
+        margin-left: 0;
+        display: flex;
+        align-items: start;
+        margin-bottom: 36px;
+    }
+}
+section .row > div:first-child {
+    margin-right: 36px;
+    width: 120px;
+}
+.row h3 {
+    font-size: 1rem;
+    font-weight: normal;
+    margin: 0;
+}
+.row p a {
+    border-bottom: 1px solid #333;
+    color: inherit;
+}
+.row p a,
+.row p a:hover {
+    text-decoration: none;
+}
+.gallery {
+    display: flex;
+    gap: 8px;
+    overflow: scroll;
+    margin-top: 20px;
+}
+.gallery img {
+    width: 120px;
+    height: auto;
+    max-height: 90px;
+    border-radius: 8px;
+}
+img.hero {
+    width: 100%;
+    height: auto;
+    display: block;
+    height: 600px;
+    object-fit: cover;
+}
+
+@media ( min-width: 500px ) {
+    .gallery {
+        width: 375px;
+    }
+}
+@media ( min-width: 800px ) {
+    img.hero {
+        height: auto;
+    }
+}

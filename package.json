@@ -1,0 +1,10 @@
+{
+  "name": "linzlim.fyi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "import.js",
+  "scripts": {
+    "start": "npx http-server public/"
+  },
+  "author": ""
+}
