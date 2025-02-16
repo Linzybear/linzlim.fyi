@@ -1,10 +1,13 @@
-import fs from 'fs';;
+import fs from 'fs';
+import imageThumbnail from 'image-thumbnail';
 
 const PUBLIC_PROJECT_DIRECTORY = `public/projects`
 const template = fs.readFileSync('template.html').toString();
 
 function generateImageHtml( images ) {
-    return images.map( ( { src, alt } ) => `<img alt="${alt}" src="${src}">`).join("\n");
+    return images.map( ( { src, alt, href } ) => `<a href="${href}">
+    <img alt="${alt}" src="${src}">
+</a>`).join("\n");
 }
 function generateLinksHtml( links ) {
     return links.map( ( { href, title, embed } ) =>
@@ -64,6 +67,16 @@ function makeLinks( path ) {
     } ).filter( ( link ) => link );
 }
 
+function copyImage(from, to) {
+    fs.copyFileSync(from, to);
+    imageThumbnail(from, {
+        height: 90
+    } ).then((thumbnail) => {
+        const thumbPath = to.split('/')
+            .slice( 0, -1 ).join('/') + '/thumb_' + to.split('/').slice(-1);
+        fs.writeFileSync(thumbPath, thumbnail)
+    })
+}
 function makeBody( directory ) {
     fs.mkdirSync(`${PUBLIC_PROJECT_DIRECTORY}/${directory}`);
     // Function to get current filenames
@@ -94,13 +107,14 @@ function makeBody( directory ) {
                 slug.description = meta.slice(3).join("\n");
             } else {
                 slug.images.push( {
-                    src: `projects/${directory}/${projDir}/${file}`,
+                    src: `projects/${directory}/${projDir}/thumb_${file}`,
+                    href: `projects/${directory}/${projDir}/${file}`,
                     alt: `Image relating to ${file}`
                 });
-                fs.copyFileSync(
+                copyImage(
                     `${projectPath}/${file}`,
                     `${publicProjectPath}/${file}`
-                )
+                );
             }
         });
         if ( slug.title ) {
