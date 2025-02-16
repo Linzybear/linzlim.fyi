@@ -2,9 +2,12 @@
   "name": "linzlim.fyi",
   "version": "1.0.0",
   "description": "",
-  "main": "import.js",
   "scripts": {
-    "start": "npx http-server public/"
+    "build": "node build.mjs",
+    "start": "npm run build && npx http-server public/"
   },
-  "author": ""
+  "author": "",
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
 }

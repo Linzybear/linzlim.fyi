@@ -43,20 +43,19 @@ header {
 }
 article {
     background: white;
-}
-
-section {
-    margin: auto;
+    color: #444;
 }
 summary {
     cursor: pointer;
 }
-summary h3,
-summary h2 {
-    display: inline-block;
+section h4,
+section h3,
+section h2 {
+    display: inline;
 }
-details {
-    margin: 0 20px;
+section {
+    padding: 0 20px;
+    margin: auto;
 }
 details summary {
     padding: 0 0 30px;
@@ -64,10 +63,10 @@ details summary {
 section ~ section {
     padding-top: 30px;
 }
-details p {
+section p {
     margin: 0;
 }
-details > div > div {
+section > div > div {
     overflow: hidden;
 }
 header h1,
@@ -83,8 +82,8 @@ h1 {
     font-weight: normal;
     margin: 0;
 }
-h2, h3 {
-    color: #222;
+h2, h3, h4, h5, h6 {
+    color: #111;
     font-size: 1rem;
     font-weight: normal;
     margin: 0;
@@ -97,51 +96,25 @@ h2 {
     font-size: 1rem;
 }
 a {
-    color: #222;
+    color: #111;
     text-decoration: none;
 }
 a:hover {
     text-decoration: underline;
 }
 
-section .row {
-    margin-left: 16px;
-}
 @media ( min-width: 500px ) {
-    details > div {
+    section > div {
         display: flex;
         align-items: flex-start;
         gap: 50px;
     }
-    section .row {
-        margin-left: 0;
-        display: flex;
-        align-items: start;
-        margin-bottom: 36px;
-    }
-}
-section .row > div:first-child {
-    margin-right: 36px;
-    width: 120px;
-}
-.row h3 {
-    font-size: 1rem;
-    font-weight: normal;
-    margin: 0;
-}
-.row p a {
-    border-bottom: 1px solid #333;
-    color: inherit;
-}
-.row p a,
-.row p a:hover {
-    text-decoration: none;
 }
 .gallery {
     display: flex;
     gap: 8px;
     overflow: scroll;
-    margin-top: 20px;
+    margin: 20px 0;
 }
 .gallery img {
     width: 120px;
