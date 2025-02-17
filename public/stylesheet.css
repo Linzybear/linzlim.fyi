@@ -47,26 +47,19 @@ header ul {
     font-size: 0.75rem;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 header li {
     display: inline;
 }
 
-
-header > div {
-    display: flex;
-    align-items: flex-start;
-    gap: var( --gap-column );
-}
-
 section > div {
     margin-bottom: var( --gap-column );
 }
 
-header > div > div:first-child {
-    display: flex;
-    justify-content: center;
+header > div > div:last-child {
+    flex-grow: 1;
 }
 
 @media ( min-width: 500px ) {
@@ -76,6 +69,7 @@ header > div > div:first-child {
     header, section {
         max-width: var( --width-section );
     }
+    header > div ,
     section > div {
         display: flex;
         align-items: flex-start;
@@ -86,6 +80,7 @@ header > div > div:first-child {
     section > div > span {
         width: var( --width-column-one );
     }
+    header > div > div,
     section > div > div {
         overflow: hidden;
         width: var( --width-column-two );
@@ -132,7 +127,7 @@ section ~ section {
     padding-top: 30px;
 }
 section p {
-    margin: 0;
+    margin: 10px 0;
 }
 section > div > div {
     overflow: hidden;
@@ -143,7 +138,8 @@ header p {
 }
 header img {
     border-radius: 50%;
-    width: 92px;
+    width: 100%;
+    max-width: 92px;
 }
 h1 {
     font-size: 1rem;
