@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs, { link } from 'fs';
 import imageThumbnail from 'image-thumbnail';
 
 const PUBLIC_PROJECT_DIRECTORY = `public/projects`
@@ -10,8 +10,11 @@ function generateImageHtml( images ) {
 </a>`).join("\n");
 }
 function generateLinksHtml( links ) {
+    const linkOrSpan = ( title, href ) => href ?
+        `<a target="_blank" href="${href}">${title}</a>` :
+        `<span>${title}</span>`;
     return links.map( ( { href, title, embed } ) =>
-         `<li>${ embed ? embed : `<a target="_blank" href="${href}">${title}</a>`}</li>`).join("\n");
+         `<li>${ embed ? embed : linkOrSpan( title, href )}</li>`).join("\n");
 }
 function generateTitleHTML( title, href ) {
     if ( href ) {
@@ -29,10 +32,9 @@ function generateHTML( slug ) {
         <div class="gallery">
             ${ generateImageHtml( slug.images ) }
         </div>
-        ${ slug.links.length ? `<h4>Links</h4>` : '' }
-        <ul>
+       ${ slug.links.length ? `<ul>
             ${ generateLinksHtml( slug.links ) }
-        </ul>
+        </ul>` : '' }
     </div>
 </div>`;
 }
@@ -57,11 +59,16 @@ function makeLinks( path ) {
         if ( file.indexOf('.') === 0 ) {
             return false;
         } else {
-            const link = fs.readFileSync(`${path}/${file}`).toString().split( "\n" );
+            const link = fs.readFileSync(`${path}/${file}`).toString().trim().split( "\n" );
+            let href = link[1];
+            if ( href && href.charAt(0) !== 'h' && href.charAt(0) !== '/' ) {
+                console.warn( `Link at ${path} was in unexpected form` );
+                href = undefined;
+            }
             return {
-                embed: getEmbed( link[1] ),
+                embed: link[1] ? getEmbed( link[1] ) : undefined,
                 title: link[0],
-                href: link[1]
+                href
             };
         }
     } ).filter( ( link ) => link );
