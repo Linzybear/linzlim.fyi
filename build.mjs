@@ -32,9 +32,9 @@ function generateHTML( slug ) {
         <div class="gallery">
             ${ generateImageHtml( slug.images ) }
         </div>
-        <ul>
+       ${ slug.links.length ? `<ul>
             ${ generateLinksHtml( slug.links ) }
-        </ul>
+        </ul>` : '' }
     </div>
 </div>`;
 }
