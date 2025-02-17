@@ -98,6 +98,49 @@ function copyImage(from, to) {
         fs.writeFileSync(thumbPath, thumbnail)
     })
 }
+
+/**
+ * Converts a folder to template data for a template.
+ *
+ * @param {string} projectPath in src folder
+ * @param {string} thumbPath without public folder.
+ * @return {Object}
+ */
+function makeSlugFromProjectFolder( projectPath, thumbPath ) {
+    let slug = {
+        images: [],
+        links: []
+    };
+    const publicProjectPath = `public/${thumbPath}`;
+    fs.mkdirSync( publicProjectPath );
+    fs.readdirSync( projectPath ).forEach((file) => {
+        const fileStats = fs.statSync(`${projectPath}/${file}`);
+        if ( file.indexOf('.') === 0 ) {
+        } else if ( file === 'links' ) {
+            slug.links = makeLinks(`${projectPath}/links`);
+        } else if ( file === 'description.txt' ) {
+            const meta = fs.readFileSync( `${projectPath}/${file}` ).toString().split('\n');
+            slug.duration = meta[0];
+            slug.title = meta[1];
+            slug.href = meta[2];
+            slug.description = meta.slice(3).join("\n");
+        } else if ( fileStats.isDirectory() ) {
+            console.warn( `Unexpected folder found: ${file}`);
+        } else {
+            slug.images.push( {
+                src: `${thumbPath}/thumb_${file}`,
+                href: `${thumbPath}/${file}`,
+                alt: `Image relating to ${file}`
+            });
+            copyImage(
+                `${projectPath}/${file}`,
+                `${publicProjectPath}/${file}`
+            );
+        }
+    });
+    return slug;
+}
+
 function makeBody( directory ) {
     fs.mkdirSync(`${PUBLIC_PROJECT_DIRECTORY}/${directory}`);
     // Function to get current filenames
@@ -109,38 +152,9 @@ function makeBody( directory ) {
         if ( projDir.indexOf('.') === 0 ) {
            return;
         }
-        let slug = {
-            images: [],
-            links: []
-        };
         const projectPath = `${root}/${projDir}`;
-        const publicProjectPath = `${PUBLIC_PROJECT_DIRECTORY}/${directory}/${projDir}`;
-        fs.mkdirSync( publicProjectPath );
-        fs.readdirSync(projectPath).forEach((file) => {
-            const fileStats = fs.statSync(`${projectPath}/${file}`);
-            if ( file.indexOf('.') === 0 ) {
-            } else if ( file === 'links' ) {
-                slug.links = makeLinks(`${projectPath}/links`);
-            } else if ( file === 'description.txt' ) {
-                const meta = fs.readFileSync( `${projectPath}/${file}` ).toString().split('\n');
-                slug.duration = meta[0];
-                slug.title = meta[1];
-                slug.href = meta[2];
-                slug.description = meta.slice(3).join("\n");
-            } else if ( fileStats.isDirectory() ) {
-                console.warn( `Unexpected folder found: ${file}`);
-            } else {
-                slug.images.push( {
-                    src: `projects/${directory}/${projDir}/thumb_${file}`,
-                    href: `projects/${directory}/${projDir}/${file}`,
-                    alt: `Image relating to ${file}`
-                });
-                copyImage(
-                    `${projectPath}/${file}`,
-                    `${publicProjectPath}/${file}`
-                );
-            }
-        });
+        const thumbPath = `projects/${directory}/${projDir}`;
+        const slug = makeSlugFromProjectFolder(projectPath, thumbPath);
         if ( slug.title ) {
             slugs.push( slug );
         }
