@@ -1,12 +1,12 @@
 import fs from 'fs';
-import imageThumbnail from 'image-thumbnail';
+import sharp from 'sharp';
 
 const PUBLIC_ASSETS_DIRECTORY = `public/assets`
 const template = fs.readFileSync('template.html').toString();
 
 function generateImageHtml( images ) {
     return images.map( ( { src, alt, href } ) => `<a href="${href}">
-    <img alt="${alt}" src="${src}">
+    <img loading="lazy" alt="${alt}" src="${src}">
 </a>`).join("\n");
 }
 function generateLinksHtml( links ) {
@@ -99,15 +99,23 @@ function makeLinks( path ) {
     } ).filter( ( link ) => link );
 }
 
+function makeThumbnail(from, to) {
+    const fileOptions = {};
+    if ( from.endsWith('.gif' ) ) {
+        fileOptions.animated = true;
+        fileOptions.pages = -1;
+    }
+    sharp( from, fileOptions )
+        .resize( {
+                height: 90
+        } ).toFile( to );
+}
+
 function copyImage(from, to) {
     fs.copyFileSync(from, to);
-    imageThumbnail(from, {
-        height: 90
-    } ).then((thumbnail) => {
-        const thumbPath = to.split('/')
-            .slice( 0, -1 ).join('/') + '/thumb_' + to.split('/').slice(-1);
-        fs.writeFileSync(thumbPath, thumbnail)
-    })
+    const thumbPath = to.split('/')
+        .slice( 0, -1 ).join('/') + '/thumb_' + to.split('/').slice(-1);
+    makeThumbnail( from, thumbPath );
 }
 
 /**
