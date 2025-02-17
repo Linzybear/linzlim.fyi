@@ -60,10 +60,15 @@ function makeLinks( path ) {
             return false;
         } else {
             const link = fs.readFileSync(`${path}/${file}`).toString().trim().split( "\n" );
+            let href = link[1];
+            if ( href && href.charAt(0) !== 'h' && href.charAt(0) !== '/' ) {
+                console.warn( `Link at ${path} was in unexpected form` );
+                href = undefined;
+            }
             return {
                 embed: link[1] ? getEmbed( link[1] ) : undefined,
                 title: link[0],
-                href: link[1]
+                href
             };
         }
     } ).filter( ( link ) => link );
