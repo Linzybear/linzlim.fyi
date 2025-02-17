@@ -1,0 +1,30 @@
+.lightbox:before,
+.lightbox {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    cursor: pointer;
+}
+.lightbox:before {
+    content: "";
+    background: black;
+    opacity: 0.8;
+}
+.lightbox img {
+    width: auto;
+    max-width: 100%;
+    max-height: 80vh;
+    display: block;
+    z-index: 1;
+    border-radius: 10px;
+}
+.lightbox button {
+    z-index: 1;
+    cursor: pointer;
+}
