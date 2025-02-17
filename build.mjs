@@ -29,7 +29,6 @@ function generateHTML( slug ) {
         <div class="gallery">
             ${ generateImageHtml( slug.images ) }
         </div>
-        ${ slug.links.length ? `<h4>Links</h4>` : '' }
         <ul>
             ${ generateLinksHtml( slug.links ) }
         </ul>
