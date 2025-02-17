@@ -23,8 +23,21 @@ function generateTitleHTML( title, href ) {
         return title;
     }
 }
-function generateHTML( slug ) {
-    return `<div>
+
+/**
+ * Generates HTML using a template and data
+ *
+ * @param {Object} slug
+ * @param {string} template
+ * @return {string}
+ */
+function generateHTML( slug, template ) {
+    switch ( template ) {
+        case 'header':
+            return `<h1>Linz Lim</h1>
+                <p>Creative in San Francisco</p>`;
+        default:
+            return `<div>
     <span>${ slug.duration }</span>
     <div>
         <h3>${ generateTitleHTML( slug.title, slug.href ) }</h3>
@@ -32,11 +45,12 @@ function generateHTML( slug ) {
         <div class="gallery">
             ${ generateImageHtml( slug.images ) }
         </div>
-       ${ slug.links.length ? `<ul>
+    ${ slug.links.length ? `<ul>
             ${ generateLinksHtml( slug.links ) }
         </ul>` : '' }
     </div>
 </div>`;
+    }
 }
 
 function getEmbed(url) {
@@ -133,7 +147,7 @@ function makeBody( directory ) {
     })
     return slugs
         .sort((a, b) => parseInt( a.duration, 10 ) > parseInt( b.duration, 10 ) ? -1 : 1)
-        .map((slug) => generateHTML(slug))
+        .map((slug) => generateHTML(slug, directory))
         .join("\n");
 }
 
