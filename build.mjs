@@ -96,6 +96,7 @@ function makeBody( directory ) {
         const publicProjectPath = `${PUBLIC_PROJECT_DIRECTORY}/${directory}/${projDir}`;
         fs.mkdirSync( publicProjectPath );
         fs.readdirSync(projectPath).forEach((file) => {
+            const fileStats = fs.statSync(`${projectPath}/${file}`);
             if ( file.indexOf('.') === 0 ) {
             } else if ( file === 'links' ) {
                 slug.links = makeLinks(`${projectPath}/links`);
@@ -105,6 +106,8 @@ function makeBody( directory ) {
                 slug.title = meta[1];
                 slug.href = meta[2];
                 slug.description = meta.slice(3).join("\n");
+            } else if ( fileStats.isDirectory() ) {
+                console.warn( `Unexpected folder found: ${file}`);
             } else {
                 slug.images.push( {
                     src: `projects/${directory}/${projDir}/thumb_${file}`,
