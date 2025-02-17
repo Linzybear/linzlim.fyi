@@ -224,4 +224,4 @@ if ( fs.existsSync( PUBLIC_ASSETS_DIRECTORY ) ) {
 }
 
 fs.mkdirSync( PUBLIC_ASSETS_DIRECTORY );
-fs.writeFileSync( `public/wip.html`, make(template) );
+fs.writeFileSync( `public/index.html`, make(template) );
