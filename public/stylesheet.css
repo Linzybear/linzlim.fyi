@@ -63,6 +63,7 @@ header {
     section > div > div {
         overflow: hidden;
         width: var( --width-column-two );
+        padding-bottom: var( --gap-row )
     }
 }
 article {
@@ -78,7 +79,11 @@ section h2 {
     display: inline-block;
 }
 section h3 {
-    font-size: 21px;
+    font-size: 1.3125rem;
+}
+section ul {
+    font-size: 0.75rem;
+    margin: var( --gap-row ) 0 0;
 }
 section span {
     white-space: nowrap;
@@ -94,9 +99,6 @@ section h2 {
 }
 section h2 + div {
     margin-top: var( --gap-row );
-}
-details summary {
-    padding: 0 0 30px;
 }
 section ~ section {
     padding-top: 30px;
@@ -145,7 +147,7 @@ a:hover {
     display: flex;
     gap: 8px;
     overflow: scroll;
-    margin: 20px 0;
+    margin: var( --gap-row ) 0 0;
     /* hide scrollabr */
     -ms-overflow-style: none;
     scrollbar-width: none;
