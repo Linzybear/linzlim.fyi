@@ -36,13 +36,8 @@ body {
 }
 
 header {
-    display: flex;
-    gap: var( --gap-header );
-    align-items: center;
-    margin: auto;
     background: white;
     color: #222;
-    padding: 20px;
 }
 
 header ul {
@@ -58,6 +53,22 @@ header li {
     display: inline;
 }
 
+
+header > div {
+    display: flex;
+    align-items: flex-start;
+    gap: var( --gap-column );
+}
+
+section > div {
+    margin-bottom: var( --gap-column );
+}
+
+header > div > div:first-child {
+    display: flex;
+    justify-content: center;
+}
+
 @media ( min-width: 500px ) {
     body {
         background: white;
@@ -69,7 +80,9 @@ header li {
         display: flex;
         align-items: flex-start;
         gap: var( --gap-column );
+        margin-bottom: 0;
     }
+    header > div > div:first-child,
     section > div > span {
         width: var( --width-column-one );
     }
@@ -102,6 +115,7 @@ section span {
     white-space: nowrap;
     margin-top: 5px;
 }
+header,
 section {
     padding: 0 20px;
     margin: auto;
@@ -110,6 +124,7 @@ section h2 {
     margin-top: var( --gap-row );
     display: none;
 }
+header > div,
 section h2 + div {
     padding-top: var( --gap-row );
 }
