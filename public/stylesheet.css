@@ -98,7 +98,7 @@ section h2 {
     display: none;
 }
 section h2 + div {
-    margin-top: var( --gap-row );
+    padding-top: var( --gap-row );
 }
 section ~ section {
     padding-top: 30px;
