@@ -1,4 +1,5 @@
 2019
 A Little Daily Dose﻿
 https://littledailydose.com/
-A conventional book with an unconventional approach towards learning Mandarin Chinese. A web application (online vocabulary handbook) was developed to spark readers' interest in Simplified and Traditional Chinese characters.
+
+A conventional book with an unconventional approach towards learning Mandarin Chinese. Through four bilingual short stories, color-coded Chinese characters are slowly introduced, in English, to the reader. Together with an online handbook of vocabulary (web application), it is designed to spark interest in the Chinese language and accompany the reader during the transition between taking the first step and taking it further.
