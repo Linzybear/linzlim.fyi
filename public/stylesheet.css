@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
     --width-section: 800px;
@@ -27,7 +27,7 @@ html {
     box-sizing: border-box;
 }
 body {
-    font-family: "Quicksand", serif;
+    font-family: "Mulish", serif;
     font-optical-sizing: auto;
     font-style: normal;
     margin: auto;
@@ -46,8 +46,9 @@ header ul {
     list-style: none;
     font-size: 0.75rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-wrap: wrap;
+    gap: 8px;
 }
 
 header li {
