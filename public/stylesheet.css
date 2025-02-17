@@ -45,6 +45,19 @@ header {
     padding: 20px;
 }
 
+header ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+header li {
+    display: inline;
+}
+
 @media ( min-width: 500px ) {
     body {
         background: white;
