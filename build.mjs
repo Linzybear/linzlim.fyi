@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs, { link } from 'fs';
 import imageThumbnail from 'image-thumbnail';
 
 const PUBLIC_PROJECT_DIRECTORY = `public/projects`
@@ -10,8 +10,11 @@ function generateImageHtml( images ) {
 </a>`).join("\n");
 }
 function generateLinksHtml( links ) {
+    const linkOrSpan = ( title, href ) => href ?
+        `<a target="_blank" href="${href}">${title}</a>` :
+        `<span>${title}</span>`;
     return links.map( ( { href, title, embed } ) =>
-         `<li>${ embed ? embed : `<a target="_blank" href="${href}">${title}</a>`}</li>`).join("\n");
+         `<li>${ embed ? embed : linkOrSpan( title, href )}</li>`).join("\n");
 }
 function generateTitleHTML( title, href ) {
     if ( href ) {
@@ -57,12 +60,8 @@ function makeLinks( path ) {
             return false;
         } else {
             const link = fs.readFileSync(`${path}/${file}`).toString().trim().split( "\n" );
-            if ( link.length === 1 ) {
-                console.warn( `Link ${path} is in unexpected form.` );
-                return false;
-            }
             return {
-                embed: getEmbed( link[1] ),
+                embed: link[1] ? getEmbed( link[1] ) : undefined,
                 title: link[0],
                 href: link[1]
             };
