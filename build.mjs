@@ -47,14 +47,14 @@ function generateHTML( slug, template ) {
     switch ( template ) {
         case 'header':
             return `<h1>${ slug.title }</h1>
-<p>${ slug.description }</p>
+${ slug.description }
 ${generateLinkedList( slug.links )}`;
         default:
             return `<div>
     <span>${ slug.duration }</span>
     <div>
         <h3>${ generateTitleHTML( slug.title, slug.href ) }</h3>
-        <p>${ slug.description }</p>
+        ${ slug.description }
         <div class="gallery">
             ${ generateImageHtml( slug.images ) }
         </div>
@@ -119,6 +119,16 @@ function copyImage(from, to) {
 }
 
 /**
+ * Convert text to html.
+ *
+ * @param {string} text
+ * @return {string}
+ */
+function toHtml( text ) {
+    return text.trim().split( "\n\n" )
+        .map( ( paraText ) => `<p>${paraText}</p>` ).join('\n');
+}
+/**
  * Converts a folder to template data for a template.
  *
  * @param {string} projectPath in src folder
@@ -144,7 +154,7 @@ function makeSlugFromProjectFolder( projectPath, thumbPath ) {
             slug.duration = meta[0];
             slug.title = meta[1];
             slug.href = meta[2];
-            slug.description = meta.slice(3).join("\n");
+            slug.description = toHtml( meta.slice(3).join("\n") );
         } else if ( fileStats.isDirectory() ) {
             console.warn( `Unexpected folder found: ${file}`);
         } else {
