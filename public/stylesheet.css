@@ -1,5 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 
+:root {
+    --width-section: 800px;
+    --width-column-one: 120px;
+    --width-column-two: 630px;
+    --gap-column: 50px;
+    --gap-row: 20px;
+    --gap-header: 40px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 html {
     color: black;
     font-size: 0.9rem;
@@ -24,7 +37,7 @@ body {
 
 header {
     display: flex;
-    gap: 20px;
+    gap: var( --gap-header );
     align-items: center;
     margin: auto;
     background: white;
@@ -36,9 +49,20 @@ header {
     body {
         background: white;
     }
-    header,
-    section {
-        max-width: 540px;
+    header, section {
+        max-width: var( --width-section );
+    }
+    section > div {
+        display: flex;
+        align-items: flex-start;
+        gap: var( --gap-column );
+    }
+    section > div > span {
+        width: var( --width-column-one );
+    }
+    section > div > div {
+        overflow: hidden;
+        width: var( --width-column-two );
     }
 }
 article {
@@ -51,11 +75,25 @@ summary {
 section h4,
 section h3,
 section h2 {
-    display: inline;
+    display: inline-block;
+}
+section h3 {
+    font-size: 21px;
+}
+section span {
+    white-space: nowrap;
+    margin-top: 5px;
 }
 section {
     padding: 0 20px;
     margin: auto;
+}
+section h2 {
+    margin-top: var( --gap-row );
+    display: none;
+}
+section h2 + div {
+    margin-top: var( --gap-row );
 }
 details summary {
     padding: 0 0 30px;
@@ -103,13 +141,6 @@ a:hover {
     text-decoration: underline;
 }
 
-@media ( min-width: 500px ) {
-    section > div {
-        display: flex;
-        align-items: flex-start;
-        gap: 50px;
-    }
-}
 .gallery {
     display: flex;
     gap: 8px;
@@ -140,11 +171,6 @@ img.hero {
     object-fit: cover;
 }
 
-@media ( min-width: 500px ) {
-    .gallery {
-        width: 375px;
-    }
-}
 @media ( min-width: 800px ) {
     img.hero {
         height: auto;
