@@ -86,7 +86,7 @@ function makeLinks( path ) {
         } else {
             const link = fs.readFileSync(`${path}/${file}`).toString().trim().split( "\n" );
             let href = link[1];
-            if ( href && href.charAt(0) !== 'h' && href.charAt(0) !== '/' ) {
+            if ( href && !href.startsWith('http') && !href.startsWith('/') && !href.startsWith('mailto:') ) {
                 console.warn( `Link at ${path} was in unexpected form` );
                 href = undefined;
             }
