@@ -56,7 +56,11 @@ function makeLinks( path ) {
         if ( file.indexOf('.') === 0 ) {
             return false;
         } else {
-            const link = fs.readFileSync(`${path}/${file}`).toString().split( "\n" );
+            const link = fs.readFileSync(`${path}/${file}`).toString().trim().split( "\n" );
+            if ( link.length === 1 ) {
+                console.warn( `Link ${path} is in unexpected form.` );
+                return false;
+            }
             return {
                 embed: getEmbed( link[1] ),
                 title: link[0],
