@@ -1,7 +1,7 @@
-import fs, { link } from 'fs';
+import fs from 'fs';
 import imageThumbnail from 'image-thumbnail';
 
-const PUBLIC_PROJECT_DIRECTORY = `public/projects`
+const PUBLIC_ASSETS_DIRECTORY = `public/assets`
 const template = fs.readFileSync('template.html').toString();
 
 function generateImageHtml( images ) {
@@ -23,8 +23,34 @@ function generateTitleHTML( title, href ) {
         return title;
     }
 }
-function generateHTML( slug ) {
-    return `<div>
+
+/**
+ * Generates a linked list
+ *
+ * @param {array} links
+ * @return {string}
+ */
+function generateLinkedList( links ) {
+    return links.length ? `<ul>
+    ${ generateLinksHtml( links ) }
+</ul>` : '';
+}
+
+/**
+ * Generates HTML using a template and data
+ *
+ * @param {Object} slug
+ * @param {string} template
+ * @return {string}
+ */
+function generateHTML( slug, template ) {
+    switch ( template ) {
+        case 'header':
+            return `<h1>${ slug.title }</h1>
+<p>${ slug.description }</p>
+${generateLinkedList( slug.links )}`;
+        default:
+            return `<div>
     <span>${ slug.duration }</span>
     <div>
         <h3>${ generateTitleHTML( slug.title, slug.href ) }</h3>
@@ -32,11 +58,10 @@ function generateHTML( slug ) {
         <div class="gallery">
             ${ generateImageHtml( slug.images ) }
         </div>
-       ${ slug.links.length ? `<ul>
-            ${ generateLinksHtml( slug.links ) }
-        </ul>` : '' }
+    ${ generateLinkedList( slug.links ) }
     </div>
 </div>`;
+    }
 }
 
 function getEmbed(url) {
@@ -84,56 +109,82 @@ function copyImage(from, to) {
         fs.writeFileSync(thumbPath, thumbnail)
     })
 }
+
+/**
+ * Converts a folder to template data for a template.
+ *
+ * @param {string} projectPath in src folder
+ * @param {string} thumbPath without public folder.
+ * @return {Object}
+ */
+function makeSlugFromProjectFolder( projectPath, thumbPath ) {
+    let slug = {
+        images: [],
+        links: []
+    };
+    const publicProjectPath = `public/${thumbPath}`;
+    if ( !fs.existsSync( publicProjectPath ) ) {
+        fs.mkdirSync( publicProjectPath );
+    }
+    fs.readdirSync( projectPath ).forEach((file) => {
+        const fileStats = fs.statSync(`${projectPath}/${file}`);
+        if ( file.indexOf('.') === 0 ) {
+        } else if ( file === 'links' ) {
+            slug.links = makeLinks(`${projectPath}/links`);
+        } else if ( file === 'description.txt' ) {
+            const meta = fs.readFileSync( `${projectPath}/${file}` ).toString().split('\n');
+            slug.duration = meta[0];
+            slug.title = meta[1];
+            slug.href = meta[2];
+            slug.description = meta.slice(3).join("\n");
+        } else if ( fileStats.isDirectory() ) {
+            console.warn( `Unexpected folder found: ${file}`);
+        } else {
+            slug.images.push( {
+                src: `${thumbPath}/thumb_${file}`,
+                href: `${thumbPath}/${file}`,
+                alt: `Image relating to ${file}`
+            });
+            copyImage(
+                `${projectPath}/${file}`,
+                `${publicProjectPath}/${file}`
+            );
+        }
+    });
+    return slug;
+}
+
 function makeBody( directory ) {
-    fs.mkdirSync(`${PUBLIC_PROJECT_DIRECTORY}/${directory}`);
+    fs.mkdirSync(`${PUBLIC_ASSETS_DIRECTORY}/${directory}`);
     // Function to get current filenames
     // in directory
     const root = `src/${directory}`;
     const projectDirectories = fs.readdirSync(root);
     const slugs = [];
-    projectDirectories.forEach((projDir) => {
-        if ( projDir.indexOf('.') === 0 ) {
-           return;
-        }
-        let slug = {
-            images: [],
-            links: []
-        };
-        const projectPath = `${root}/${projDir}`;
-        const publicProjectPath = `${PUBLIC_PROJECT_DIRECTORY}/${directory}/${projDir}`;
-        fs.mkdirSync( publicProjectPath );
-        fs.readdirSync(projectPath).forEach((file) => {
-            const fileStats = fs.statSync(`${projectPath}/${file}`);
-            if ( file.indexOf('.') === 0 ) {
-            } else if ( file === 'links' ) {
-                slug.links = makeLinks(`${projectPath}/links`);
-            } else if ( file === 'description.txt' ) {
-                const meta = fs.readFileSync( `${projectPath}/${file}` ).toString().split('\n');
-                slug.duration = meta[0];
-                slug.title = meta[1];
-                slug.href = meta[2];
-                slug.description = meta.slice(3).join("\n");
-            } else if ( fileStats.isDirectory() ) {
-                console.warn( `Unexpected folder found: ${file}`);
-            } else {
-                slug.images.push( {
-                    src: `projects/${directory}/${projDir}/thumb_${file}`,
-                    href: `projects/${directory}/${projDir}/${file}`,
-                    alt: `Image relating to ${file}`
-                });
-                copyImage(
-                    `${projectPath}/${file}`,
-                    `${publicProjectPath}/${file}`
-                );
-            }
-        });
+
+    if ( fs.existsSync( `${root}/description.txt` )  ) {
+        const slug = makeSlugFromProjectFolder(root, `assets/${directory}`);
         if ( slug.title ) {
             slugs.push( slug );
         }
-    })
+    } else {
+        projectDirectories.forEach((projDir) => {
+            const filePath = `${root}/${projDir}`;
+            const fileStats = fs.statSync( filePath );
+            if ( projDir.indexOf('.') === 0 ) {
+            return;
+            } else if ( fileStats.isDirectory() ) {
+                const thumbPath = `assets/${directory}/${projDir}`;
+                const slug = makeSlugFromProjectFolder(filePath, thumbPath);
+                if ( slug.title ) {
+                    slugs.push( slug );
+                }
+            }
+        })
+    }
     return slugs
         .sort((a, b) => parseInt( a.duration, 10 ) > parseInt( b.duration, 10 ) ? -1 : 1)
-        .map((slug) => generateHTML(slug))
+        .map((slug) => generateHTML(slug, directory))
         .join("\n");
 }
 
@@ -150,9 +201,9 @@ function make( html ) {
 
     return newHtml;
 }
-if ( fs.existsSync( PUBLIC_PROJECT_DIRECTORY ) ) {
-    fs.rmdirSync( PUBLIC_PROJECT_DIRECTORY, { recursive: true, force: true } );
+if ( fs.existsSync( PUBLIC_ASSETS_DIRECTORY ) ) {
+    fs.rmdirSync( PUBLIC_ASSETS_DIRECTORY, { recursive: true, force: true } );
 }
 
-fs.mkdirSync( PUBLIC_PROJECT_DIRECTORY );
+fs.mkdirSync( PUBLIC_ASSETS_DIRECTORY );
 fs.writeFileSync( `public/wip.html`, make(template) );
