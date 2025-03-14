@@ -203,3 +203,12 @@ img.hero {
         height: auto;
     }
 }
+
+@media print {
+    article img.hero {
+        display: none;
+    }
+    section img {
+        filter: grayscale(1);
+    }
+}
