@@ -208,7 +208,7 @@ img.hero {
     article img.hero {
         display: none;
     }
-    section img {
+    img {
         filter: grayscale(1);
     }
 }
