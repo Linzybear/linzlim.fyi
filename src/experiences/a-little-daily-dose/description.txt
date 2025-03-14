@@ -2,6 +2,4 @@
 A Little Daily Dose: Discovering Chinese Characters Through Short Stories ↗
 https://littledailydose.com/
 
-A conventional book with an unconventional approach towards learning Mandarin Chinese. Through four bilingual short stories, color-coded Chinese characters are slowly introduced, in English, to the reader. 
-
-Together with an online handbook of vocabulary, it is designed to spark interest in the Chinese language and accompany the reader during the transition between taking the first step and taking it further.
+A conventional book with an unconventional approach towards learning Mandarin Chinese. Through four bilingual short stories, color-coded Chinese characters are slowly introduced, in English, to the reader. Created a web app in the form of a vocabulary handbook to spark interest in the Chinese language and accompany the reader during the transition between taking the first step and taking it further.
