@@ -201,7 +201,22 @@ function makeBody( directory ) {
         })
     }
     return slugs
-        .sort((a, b) => parseInt( a.duration, 10 ) > parseInt( b.duration, 10 ) ? -1 : 1)
+        .sort((a, b) => {
+            const aMatch = a.duration.split( '-' );
+            const bMatch = b.duration.split( '-' );
+            const aStart = aMatch.length === 2 ? aMatch[0] : a.duration;
+            const bStart = bMatch.length === 2 ? bMatch[0] : b.duration;
+            let aEnd = aMatch.length === 2 ? aMatch[1] : aStart;
+            let bEnd = bMatch.length === 2 ? bMatch[1] : bStart;
+            if ( aEnd && aEnd.length === 2 ) {
+                aEnd = `${aStart.slice(0, 2)}${aEnd}`;
+            }
+            if ( bEnd && bEnd.length === 2 ) {
+                bEnd = `${bStart.slice(0, 2)}${bEnd}`;
+            }
+            console.log(aEnd, bEnd, a.title);
+            return parseInt( aEnd, 10 ) > parseInt( bEnd, 10 ) ? -1 : 1
+        })
         .map((slug) => generateHTML(slug, directory))
         .join("\n");
 }
