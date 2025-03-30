@@ -106,7 +106,7 @@ section h3 {
 }
 section ul {
     font-size: 0.75rem;
-    margin: var( --gap-row ) 0 0;
+    margin: var( --margin-gallery ) 0 0;
 }
 section span {
     white-space: nowrap;
