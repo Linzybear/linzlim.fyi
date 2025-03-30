@@ -5,6 +5,7 @@
     --width-column-one: 120px;
     --width-column-two: 630px;
     --margin-gallery: 20px;
+    --margin-list: 8px;
     --gap-column: 36px;
     --gap-row: 36px;
     --gap-header: 40px;
@@ -106,7 +107,7 @@ section h3 {
 }
 section ul {
     font-size: 0.75rem;
-    margin: var( --margin-gallery ) 0 0;
+    margin: var( --margin-list ) 0 0;
 }
 section span {
     white-space: nowrap;
