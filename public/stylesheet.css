@@ -4,8 +4,9 @@
     --width-section: 800px;
     --width-column-one: 120px;
     --width-column-two: 630px;
-    --gap-column: 50px;
-    --gap-row: 20px;
+    --margin-gallery: 20px;
+    --gap-column: 36px;
+    --gap-row: 36px;
     --gap-header: 40px;
 }
 
@@ -172,7 +173,7 @@ a:hover {
     display: flex;
     gap: 8px;
     overflow: scroll;
-    margin: var( --gap-row ) 0 0;
+    margin: var( --margin-gallery ) 0 0;
     /* hide scrollabr */
     -ms-overflow-style: none;
     scrollbar-width: none;
