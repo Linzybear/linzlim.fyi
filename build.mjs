@@ -214,7 +214,9 @@ function makeBody( directory ) {
             if ( bEnd && bEnd.length === 2 ) {
                 bEnd = `${bStart.slice(0, 2)}${bEnd}`;
             }
-            console.log(aEnd, bEnd, a.title);
+            if ( bEnd === aEnd ) {
+                return bStart < aStart ? -1 : 1;
+            }
             return parseInt( aEnd, 10 ) > parseInt( bEnd, 10 ) ? -1 : 1
         })
         .map((slug) => generateHTML(slug, directory))
