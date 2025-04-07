@@ -4,4 +4,4 @@ https://littledailydose.com/
 
 A conventional book with an unconventional approach towards learning Mandarin Chinese. Through four bilingual short stories, color-coded Chinese characters are slowly introduced, in English, to the reader. The book's layout features English stories on the left-hand pages, with corresponding Chinese stories on the right, enabling seamless character recognition and contextual understanding.
 
-Collaborated with a web developer, a vocabulary handbook (in the form a web app) was created to spark interest in the Chinese language and accompany the reader during the transition between taking the first step and taking it further.
+Collaborated with a web developer to create an online vocabulary handbook to introduce Chinese characters to readers and accompany them during the transition between taking the first step and taking it further. 
