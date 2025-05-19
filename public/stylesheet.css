@@ -174,7 +174,7 @@ a:hover {
     display: flex;
     gap: 8px;
     overflow: scroll;
-    margin: var( --margin-gallery ) 0 0;
+    margin: var( --margin-gallery ) 1px 0;
     /* hide scrollabr */
     -ms-overflow-style: none;
     scrollbar-width: none;
