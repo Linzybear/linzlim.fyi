@@ -33,7 +33,6 @@ function mkLightBox( src ) {
         img = lb.querySelector( 'img' );
     }
     img.src = src;
-    console.log( src, activeImagesInLightbox )
     lb.dataset.active = activeImagesInLightbox.indexOf( src );
     lb.classList.add( LB_DISPLAY_CLASS );
     if ( activeImagesInLightbox.length > 1 ) {
@@ -43,22 +42,30 @@ function mkLightBox( src ) {
     }
 }
 
+/**
+ * @param {boolean} increment, true for next, false for previous.
+ */
+function swipeToImage( increment ) {
+    if ( lb ) {
+        const current = parseInt( lb.dataset.active, 10 );
+        let next = increment ? current + 1 : current - 1;
+        if ( next === -1 ) {
+            next = activeImagesInLightbox.length - 1;
+        } else if ( next > activeImagesInLightbox.length - 1 ) {
+            next = 0;
+        }
+        lb.dataset.active = next;
+        mkLightBox( activeImagesInLightbox[ next ] );
+    }
+}
 
 document.body.addEventListener( 'click', ( ev ) => {
-    const lb = ev.target.closest( '.lightbox' );
+    lb = ev.target.closest( '.lightbox' );
     if ( lb ) {
         const arrow = ev.target.closest( '.lightbox-arrow' );
         if ( arrow ) {
             const increment = arrow.classList.contains( 'lightbox-fwd' );
-            const current = parseInt( lb.dataset.active, 10 );
-            let next = increment ? current + 1 : current - 1;
-            if ( next === -1 ) {
-                next = activeImagesInLightbox.length - 1;
-            } else if ( next > activeImagesInLightbox.length - 1 ) {
-                next = 0;
-            }
-            lb.dataset.active = next;
-            mkLightBox( activeImagesInLightbox[ next ] );
+            swipeToImage( increment );
         } else {
             ev.target.closest('.lightbox').classList.remove( LB_DISPLAY_CLASS );
         }
@@ -67,7 +74,6 @@ document.body.addEventListener( 'click', ( ev ) => {
         ev.preventDefault();
         const link = ev.target.closest('a');
         const closestGallery = ev.target.closest( '.gallery' );
-        console.log( closestGallery);
         if ( closestGallery ) {
             activeImagesInLightbox = Array.from(
                 closestGallery.querySelectorAll( 'a' )
@@ -75,6 +81,18 @@ document.body.addEventListener( 'click', ( ev ) => {
         }
         if ( link ) {
             mkLightBox( link.getAttribute('href') );
+        }
+    }
+} );
+
+document.addEventListener('keydown', function(event) {
+    if ( lb ) {
+        if ( event.key === 'Escape') {
+            lb.classList.remove( LB_DISPLAY_CLASS );
+        } else if (event.key === 'ArrowLeft') {
+            swipeToImage( false );
+        } else if (event.key === 'ArrowRight') {
+            swipeToImage( true );
         }
     }
 } );
