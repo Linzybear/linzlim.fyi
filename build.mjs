@@ -10,7 +10,7 @@ const getPagePathFromSlugTitle = ( title ) =>
 
 function generateImageHtml( images ) {
     return images.map( ( { src, alt, href } ) => `<a href="${href}">
-    <img loading="lazy" alt="${alt}" src="${src}">
+    <img loading="lazy" alt="${alt}" src="/${src}">
 </a>`).join("\n");
 }
 function generateLinksHtml( links ) {
