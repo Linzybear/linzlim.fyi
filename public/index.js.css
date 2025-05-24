@@ -5,11 +5,33 @@
     top: 0;
     right: 0;
     bottom: 0;
-    display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    flex-flow: column;
+    flex-flow: row;
     cursor: pointer;
+}
+.lightbox {
+    display: none;
+}
+.lightbox.lightbox--visible {
+    display: flex;
+}
+.lightbox > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.lightbox-arrow {
+    color: white;
+    font-size: 30px;
+    z-index: 1;
+    padding: 12px;
+    cursor: pointer;
+    display: none;
+}
+.lightbox--multi .lightbox-arrow {
+    display: flex;
 }
 .lightbox:before {
     content: "";
@@ -24,7 +46,21 @@
     z-index: 1;
     border-radius: 10px;
 }
+.lightbox--multi.lightbox img {
+    max-width: 300px;
+}
 .lightbox button {
     z-index: 1;
     cursor: pointer;
+}
+@media ( min-width: 500px ) {
+    .lightbox {
+        padding: 0 50px;
+    }
+    .lightbox img {
+        max-width: 100%;
+    }
+    .lightbox--multi.lightbox img {
+        max-width: 80%;
+    }
 }
