@@ -228,6 +228,9 @@ img.hero {
     img.hero {
         height: auto;
     }
+    html.page-home h2 {
+        display: none;
+    }
 }
 
 @media print {
