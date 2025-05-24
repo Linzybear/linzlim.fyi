@@ -2,7 +2,11 @@ import fs from 'fs';
 import sharp from 'sharp';
 
 const PUBLIC_ASSETS_DIRECTORY = `public/assets`
+const PUBLIC_PROJECT_DIR = `public/projects`;
 const template = fs.readFileSync('template.html').toString();
+
+const getPagePathFromSlugTitle = ( title ) =>
+    `${title.replace(/[→&:]/g, '' ).replace(/ /g, '_' )}.html`;
 
 function generateImageHtml( images ) {
     return images.map( ( { src, alt, href } ) => `<a href="${href}">
@@ -17,11 +21,10 @@ function generateLinksHtml( links ) {
          `<li>${ embed ? embed : linkOrSpan( title, href )}</li>`).join("\n");
 }
 function generateTitleHTML( title, href ) {
-    if ( href ) {
-        return `<a target="_blank" href="${href}">${title}</a>`;
-    } else {
-        return title;
+    if ( !href ) {
+        href = `/projects/${getPagePathFromSlugTitle(title)}`;
     }
+    return `<a target="_blank" href="${href}">${title}</a>`;
 }
 
 /**
@@ -175,7 +178,11 @@ function makeSlugFromProjectFolder( projectPath, thumbPath ) {
     return slug;
 }
 
-function makeBody( directory ) {
+function makeSubpage( slug ) {
+    return `${ slug.title}`;
+}
+
+function makeIndexBodyAndSubPages( directory ) {
     fs.mkdirSync(`${PUBLIC_ASSETS_DIRECTORY}/${directory}`);
     // Function to get current filenames
     // in directory
@@ -203,6 +210,10 @@ function makeBody( directory ) {
             }
         })
     }
+    slugs.forEach((slug) => {
+        const path = getPagePathFromSlugTitle( slug.title );
+        fs.writeFileSync( `${PUBLIC_PROJECT_DIR}/${path}`, makeSubpage(slug) );
+    });
     return slugs
         .sort((a, b) => {
             const aMatch = a.duration.split( '-' );
@@ -233,15 +244,20 @@ function make( html ) {
     const directories = fs.readdirSync('src');
     directories.forEach((d) => {
         if ( d.indexOf('.') !== 0 ) {
-            newHtml = newHtml.replace( `<!-- ${d} -->`, makeBody(d) )
+            newHtml = newHtml.replace( `<!-- ${d} -->`, makeIndexBodyAndSubPages(d) )
         }
     })
 
-    return newHtml;
+    fs.writeFileSync( `public/index.html`, newHtml );
 }
 if ( fs.existsSync( PUBLIC_ASSETS_DIRECTORY ) ) {
     fs.rmdirSync( PUBLIC_ASSETS_DIRECTORY, { recursive: true, force: true } );
 }
 
+if ( fs.existsSync( PUBLIC_PROJECT_DIR ) ) {
+    fs.rmdirSync( PUBLIC_PROJECT_DIR, { recursive: true, force: true } );
+}
+
+fs.mkdirSync( PUBLIC_PROJECT_DIR );
 fs.mkdirSync( PUBLIC_ASSETS_DIRECTORY );
-fs.writeFileSync( `public/index.html`, make(template) );
+make(template);
