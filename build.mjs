@@ -154,7 +154,10 @@ function makeSlugFromProjectFolder( projectPath, thumbPath ) {
             slug.duration = meta[0];
             slug.title = meta[1];
             slug.href = meta[2];
-            slug.description = toHtml( meta.slice(3).join("\n") );
+            const slugText = meta.slice(3);
+            const slugDescription = slugText.filter((t) => t)[0] || '';
+            slug.summary = toHtml( slugDescription.trim() );
+            slug.description = toHtml( slugText.join("\n") );
         } else if ( fileStats.isDirectory() ) {
             console.warn( `Unexpected folder found: ${file}`);
         } else {
