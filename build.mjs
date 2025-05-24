@@ -4,13 +4,14 @@ import sharp from 'sharp';
 const PUBLIC_ASSETS_DIRECTORY = `public/assets`
 const PUBLIC_PROJECT_DIR = `public/projects`;
 const template = fs.readFileSync('template.html').toString();
+const pageTemplate = fs.readFileSync('pageTemplate.html').toString();
 
 const getPagePathFromSlugTitle = ( title ) =>
     `${title.replace(/[→&:]/g, '' ).replace(/ /g, '_' )}.html`;
 
-function generateImageHtml( images ) {
+function generateImageHtml( images, useFullSize ) {
     return images.map( ( { src, alt, href } ) => `<a href="${href}">
-    <img loading="lazy" alt="${alt}" src="${src}">
+    <img loading="lazy" alt="${alt}" src="${useFullSize ? href : src}">
 </a>`).join("\n");
 }
 function generateLinksHtml( links ) {
@@ -21,10 +22,12 @@ function generateLinksHtml( links ) {
          `<li>${ embed ? embed : linkOrSpan( title, href )}</li>`).join("\n");
 }
 function generateTitleHTML( title, href ) {
+    let target = `target="_blank"`;
     if ( !href ) {
         href = `/projects/${getPagePathFromSlugTitle(title)}`;
+        target = '';
     }
-    return `<a target="_blank" href="${href}">${title}</a>`;
+    return `<a ${target} href="${href}">${title}</a>`;
 }
 
 /**
@@ -47,21 +50,29 @@ function generateLinkedList( links ) {
  * @return {string}
  */
 function generateHTML( slug, template ) {
+    const imageGallery =  ( fullSize ) => `<div class="gallery gallery--${ fullSize ? 'full' : 'compact'}">${ generateImageHtml( slug.images, fullSize ) }</div>`;
+    const linkList = generateLinkedList( slug.links );
+
     switch ( template ) {
         case 'header':
-            return `<h1>${ slug.title }</h1>
+            return `<h1><a href="/">${ slug.title }</a></h1>
 ${ slug.description }
 ${generateLinkedList( slug.links )}`;
+        case 'overview':
+            return `
+<h2>${ slug.title }</h2>
+${ slug.description }
+${ linkList.length ? `<h4>Highlights</h4>` : '' }
+${linkList}
+${imageGallery( true )}`;
         default:
             return `<div>
     <span>${ slug.duration }</span>
     <div>
         <h3>${ generateTitleHTML( slug.title, slug.href ) }</h3>
         ${ slug.description }
-        <div class="gallery">
-            ${ generateImageHtml( slug.images ) }
-        </div>
-    ${ generateLinkedList( slug.links ) }
+        ${ imageGallery() }
+        ${ linkList }
     </div>
 </div>`;
     }
@@ -178,11 +189,15 @@ function makeSlugFromProjectFolder( projectPath, thumbPath ) {
     return slug;
 }
 
-function makeSubpage( slug ) {
-    return `${ slug.title}`;
+function makeSubpage( slug, headerHTML ) {
+    return pageTemplate.replace(
+        '<!-- header -->', headerHTML
+    ).replace(
+        '<!-- overview -->', generateHTML( slug, 'overview' )
+    );
 }
 
-function makeIndexBodyAndSubPages( directory ) {
+function makeIndexBodyAndSubPages( directory, header = '' ) {
     fs.mkdirSync(`${PUBLIC_ASSETS_DIRECTORY}/${directory}`);
     // Function to get current filenames
     // in directory
@@ -212,7 +227,7 @@ function makeIndexBodyAndSubPages( directory ) {
     }
     slugs.forEach((slug) => {
         const path = getPagePathFromSlugTitle( slug.title );
-        fs.writeFileSync( `${PUBLIC_PROJECT_DIR}/${path}`, makeSubpage(slug) );
+        fs.writeFileSync( `${PUBLIC_PROJECT_DIR}/${path}`, makeSubpage(slug, header) );
     });
     return slugs
         .sort((a, b) => {
@@ -245,7 +260,7 @@ function make( html ) {
     const header = makeIndexBodyAndSubPages( 'header' );
     directories.forEach((d) => {
         if ( d.indexOf('.') !== 0 ) {
-            const replacement = d === 'header' ? header : makeIndexBodyAndSubPages(d);
+            const replacement = d === 'header' ? header : makeIndexBodyAndSubPages(d, header);
             newHtml = newHtml.replace( `<!-- ${d} -->`, replacement )
         }
     })
