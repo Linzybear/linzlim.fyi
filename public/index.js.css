@@ -26,12 +26,14 @@
     color: white;
     font-size: 30px;
     z-index: 1;
-    padding: 12px;
+    padding: 2px;
     cursor: pointer;
     display: none;
 }
 .lightbox--multi .lightbox-arrow {
     display: flex;
+    background: black;
+    opacity: 0.8;
 }
 .lightbox:before {
     content: "";
@@ -45,9 +47,10 @@
     display: block;
     z-index: 1;
     border-radius: 10px;
-}
-.lightbox--multi.lightbox img {
-    max-width: 300px;
+    z-index: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
 }
 .lightbox button {
     z-index: 1;
@@ -62,5 +65,10 @@
     }
     .lightbox--multi.lightbox img {
         max-width: 80%;
+        position: relative;
+    }
+    .lightbox-arrow {
+        padding: 12px;
+        opacity: 1;
     }
 }
