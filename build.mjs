@@ -10,7 +10,7 @@ const getPagePathFromSlugTitle = ( title ) =>
 
 function generateImageHtml( images ) {
     return images.map( ( { src, alt, href } ) => `<a href="${href}">
-    <img loading="lazy" alt="${alt}" src="/${src}">
+    <img loading="lazy" alt="${alt}" src="${src}">
 </a>`).join("\n");
 }
 function generateLinksHtml( links ) {
@@ -165,8 +165,8 @@ function makeSlugFromProjectFolder( projectPath, thumbPath ) {
             console.warn( `Unexpected folder found: ${file}`);
         } else {
             slug.images.push( {
-                src: `${thumbPath}/thumb_${file}`,
-                href: `${thumbPath}/${file}`,
+                src: `/${thumbPath}/thumb_${file}`,
+                href: `/${thumbPath}/${file}`,
                 alt: `Image relating to ${file}`
             });
             copyImage(
@@ -242,9 +242,11 @@ function make( html ) {
     // Function to get current filenames
     // in directory
     const directories = fs.readdirSync('src');
+    const header = makeIndexBodyAndSubPages( 'header' );
     directories.forEach((d) => {
         if ( d.indexOf('.') !== 0 ) {
-            newHtml = newHtml.replace( `<!-- ${d} -->`, makeIndexBodyAndSubPages(d) )
+            const replacement = d === 'header' ? header : makeIndexBodyAndSubPages(d);
+            newHtml = newHtml.replace( `<!-- ${d} -->`, replacement )
         }
     })
 

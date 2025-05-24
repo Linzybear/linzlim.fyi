@@ -1,6 +1,6 @@
 const stylesheet = document.createElement('link');
 stylesheet.rel = 'stylesheet';
-stylesheet.href = 'index.js.css';
+stylesheet.href = '/index.js.css';
 document.head.appendChild(stylesheet);
 
 function arrows(lb) {
