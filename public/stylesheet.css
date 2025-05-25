@@ -21,7 +21,6 @@
 html {
     font-size: 0.9rem;
     height: 100%;
-    background: #a0d4d5;
 }
 
 @media ( min-width: 500px ) {
