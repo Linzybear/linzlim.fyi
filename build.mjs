@@ -70,9 +70,8 @@ ${imageGallery( true )}`;
     <span>${ slug.duration }</span>
     <div>
         <h3>${ generateTitleHTML( slug.title, slug.href ) }</h3>
-        ${ slug.description }
+        ${ slug.summary }
         ${ imageGallery() }
-        ${ linkList }
     </div>
 </div>`;
     }
@@ -81,9 +80,7 @@ ${imageGallery( true )}`;
 function getEmbed(url) {
     const w = 420;
     const h = 240;
-    if ( url.indexOf('vimeo.com') > -1 ) {
-        return `<iframe src="${url}" width="${w}" height="${h}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-    } else if ( url.indexOf('youtube.com') > -1 ) {
+    if ( url.indexOf('youtube.com') > -1 ) {
         const ytUrl = `https://www.youtube.com/embed/${url.split('?v=').slice(-1)[0]}`
         return `<p><iframe width="${w} height="${h}" src="${ytUrl}" title="" frameBorder="0"  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"  allowFullScreen></iframe></p>`;
     }
