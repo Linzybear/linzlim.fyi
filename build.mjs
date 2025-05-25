@@ -62,7 +62,6 @@ ${generateLinkedList( slug.links )}`;
             return `
 <h2>${ slug.title }</h2>
 ${ slug.description }
-${ linkList.length ? `<h4>References</h4>` : '' }
 ${linkList}
 ${imageGallery( true )}`;
         default:

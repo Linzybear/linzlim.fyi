@@ -21,7 +21,6 @@
 html {
     font-size: 0.9rem;
     height: 100%;
-    background: #a0d4d5;
 }
 
 @media ( min-width: 500px ) {
@@ -119,7 +118,6 @@ section ul {
     margin: var( --margin-list ) 0 0;
 }
 section span {
-    white-space: nowrap;
     margin-top: 5px;
 }
 header,
@@ -177,6 +175,7 @@ a {
 
 article a[href^="http"]::after {
     content: '→';
+    margin-left: 2px;
 }
 
 a:hover {
