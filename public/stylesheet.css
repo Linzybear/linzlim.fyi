@@ -61,6 +61,15 @@ header li {
     display: inline;
 }
 
+header li:after {
+    content: '⸱';
+    margin-left: 8px;
+}
+
+header li:last-child:after {
+    content: none;
+}
+
 section > div {
     margin-bottom: var( --gap-column );
 }
