@@ -166,7 +166,8 @@ function makeSlugFromProjectFolder( projectPath, thumbPath ) {
             slug.href = meta[2];
             const slugText = meta.slice(3);
             const slugDescription = slugText.filter((t) => t)[0] || '';
-            slug.summary = toHtml( slugDescription.trim() );
+            slug.summaryText = slugDescription.trim();
+            slug.summary = toHtml( slug.summaryText );
             slug.description = toHtml( slugText.join("\n") );
         } else if ( fileStats.isDirectory() ) {
             console.warn( `Unexpected folder found: ${file}`);
@@ -186,11 +187,22 @@ function makeSlugFromProjectFolder( projectPath, thumbPath ) {
 }
 
 function makeSubpage( slug, headerHTML ) {
-    return pageTemplate.replace(
+    let result = pageTemplate.replace(
         '<!-- header -->', headerHTML
     ).replace(
         '<!-- overview -->', generateHTML( slug, 'overview' )
     );
+    Object.keys( slug ).forEach( ( key ) => {
+        result = result.replaceAll( `<!-- ${ key } -->`, slug[ key ] );
+    } );
+    let image;
+    try {
+        image = slug.images[ 0 ].src;
+    } catch ( e ) {
+        image = '';
+    }
+    result = result.replaceAll( `<!-- image -->`, image );
+    return result;
 }
 
 function makeIndexBodyAndSubPages( directory, header = '' ) {
