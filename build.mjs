@@ -7,7 +7,7 @@ const template = fs.readFileSync('template.html').toString();
 const pageTemplate = fs.readFileSync('pageTemplate.html').toString();
 
 const getPagePathFromSlugTitle = ( title ) =>
-    `${title.replace(/[→&:]/g, '' ).replace(/ /g, '_' )}.html`;
+    `${title.replace(/[→&:']/g, '' ).replace(/ /g, '_' )}.html`;
 
 function generateImageHtml( images, useFullSize ) {
     return images.map( ( { src, alt, href } ) => `<a href="${href}">
