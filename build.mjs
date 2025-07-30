@@ -143,9 +143,10 @@ function toHtml( text ) {
  *
  * @param {string} projectPath in src folder
  * @param {string} thumbPath without public folder.
+ * @param {boolean} [summarize=true]
  * @return {Object}
  */
-function makeSlugFromProjectFolder( projectPath, thumbPath ) {
+function makeSlugFromProjectFolder( projectPath, thumbPath, summarize = true ) {
     let slug = {
         images: [],
         links: []
@@ -165,10 +166,12 @@ function makeSlugFromProjectFolder( projectPath, thumbPath ) {
             slug.title = meta[1];
             slug.href = meta[2];
             const slugText = meta.slice(3);
+            const fullDescription = slugText.join("\n");
             const slugDescription = slugText.filter((t) => t)[0] || '';
-            slug.summaryText = slugDescription.trim();
+            slug.summaryText = summarize ?
+                slugDescription.trim() : fullDescription;
             slug.summary = toHtml( slug.summaryText );
-            slug.description = toHtml( slugText.join("\n") );
+            slug.description = toHtml( fullDescription );
         } else if ( fileStats.isDirectory() ) {
             console.warn( `Unexpected folder found: ${file}`);
         } else {
@@ -205,7 +208,7 @@ function makeSubpage( slug, headerHTML ) {
     return result;
 }
 
-function makeIndexBodyAndSubPages( directory, header = '' ) {
+function makeIndexBodyAndSubPages( directory, header = '', summarize = true ) {
     fs.mkdirSync(`${PUBLIC_ASSETS_DIRECTORY}/${directory}`);
     // Function to get current filenames
     // in directory
@@ -214,7 +217,7 @@ function makeIndexBodyAndSubPages( directory, header = '' ) {
     const slugs = [];
 
     if ( fs.existsSync( `${root}/description.txt` )  ) {
-        const slug = makeSlugFromProjectFolder(root, `assets/${directory}`);
+        const slug = makeSlugFromProjectFolder(root, `assets/${directory}`, summarize);
         if ( slug.title ) {
             slugs.push( slug );
         }
@@ -226,7 +229,7 @@ function makeIndexBodyAndSubPages( directory, header = '' ) {
             return;
             } else if ( fileStats.isDirectory() ) {
                 const thumbPath = `assets/${directory}/${projDir}`;
-                const slug = makeSlugFromProjectFolder(filePath, thumbPath);
+                const slug = makeSlugFromProjectFolder(filePath, thumbPath, summarize);
                 if ( slug.title ) {
                     slugs.push( slug );
                 }
@@ -260,15 +263,15 @@ function makeIndexBodyAndSubPages( directory, header = '' ) {
         .join("\n");
 }
 
-function make( html ) {
+function make( html, summarize = true ) {
     let newHtml = html;
     // Function to get current filenames
     // in directory
     const directories = fs.readdirSync('src');
-    const header = makeIndexBodyAndSubPages( 'header' );
+    const header = makeIndexBodyAndSubPages( 'header', '', summarize );
     directories.forEach((d) => {
         if ( d.indexOf('.') !== 0 ) {
-            const replacement = d === 'header' ? header : makeIndexBodyAndSubPages(d, header);
+            const replacement = d === 'header' ? header : makeIndexBodyAndSubPages(d, header, summarize);
             newHtml = newHtml.replace( `<!-- ${d} -->`, replacement )
         }
     })
@@ -285,4 +288,4 @@ if ( fs.existsSync( PUBLIC_PROJECT_DIR ) ) {
 
 fs.mkdirSync( PUBLIC_PROJECT_DIR );
 fs.mkdirSync( PUBLIC_ASSETS_DIRECTORY );
-make(template);
+make(template, /* summarize portfolio */ true);
