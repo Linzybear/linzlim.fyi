@@ -47,7 +47,7 @@ header {
 }
 
 header ul {
-    margin: 0;
+    margin: 12px 0 0;
     padding: 0;
     list-style: none;
     font-size: 0.75rem;
@@ -68,6 +68,10 @@ header li:after {
 
 header li:last-child:after {
     content: none;
+}
+
+header li a {
+    font-weight: bold;
 }
 
 section > div {
