@@ -65,7 +65,7 @@ ${ slug.description }
 ${linkList}
 ${imageGallery( true )}`;
         default:
-            return `<div>
+            return `<div class="experience">
     <span>${ slug.duration }</span>
     <div>
         <h3>${ generateTitleHTML( slug.title, slug.href ) }</h3>
