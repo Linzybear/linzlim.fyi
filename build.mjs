@@ -243,7 +243,7 @@ function makeIndexBodyAndSubPages( directory, header = '', summarize = true ) {
         })
     }
     slugs.forEach((slug) => {
-        redirects[getPagePathFromSlugTitle( slug.title )] = slug.href;
+        redirects[`/projects/${getPagePathFromSlugTitle( slug.title )}`] = slug.href;
         fs.writeFileSync( `${PUBLIC_DIRECTORY}/${slug.href}`, makeSubpage(slug, header) );
     });
     return slugs
