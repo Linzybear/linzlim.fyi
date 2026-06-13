@@ -296,7 +296,7 @@ function getRedirectsFromGitHistory() {
 function makeRedirects() {
     const redirects = getRedirectsFromGitHistory();
     return fs.readFileSync( 'redirects.txt' ).toString() + Object.keys( redirects )
-        .map( ( key ) => `${key}    ${redirects[key]}` ).join('\n') + '\n';
+        .map( ( key ) => `${key.toLowerCase()}    ${redirects[key]}` ).join('\n') + '\n';
 }
 
 function make( html, summarize = true ) {
