@@ -55,7 +55,10 @@ function generateLinkedList( links ) {
  * @return {string}
  */
 function generateHTML( slug, template ) {
-    const imageGallery =  ( fullSize ) => `<div class="gallery gallery--${ fullSize ? 'full' : 'compact'}">${ generateImageHtml( slug.images, fullSize ) }</div>`;
+    const imageGallery =  ( fullSize ) => `<div class="gallery gallery--${ fullSize ? 'full' : 'compact'}">
+<div class="gallery__carousel">${ generateImageHtml( slug.images, fullSize ) }</div>
+<div class="gallery__fade"></div>
+</div>`;
     const linkList = generateLinkedList( slug.links );
 
     switch ( template ) {
