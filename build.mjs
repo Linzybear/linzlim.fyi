@@ -291,7 +291,7 @@ function getRedirectsFromGitHistory() {
 
 function makeRedirects() {
     const redirects = getRedirectsFromGitHistory();
-    return Object.keys( redirects )
+    return fs.readFileSync( 'redirects.txt' ).toString() + Object.keys( redirects )
         .map( ( key ) => `${key}    ${redirects[key]}` ).join('\n') + '\n';
 }
 
