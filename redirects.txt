@@ -1,1 +1,6 @@
 # Redirects
+/projects/write_now%EF%BB%BF_(mobile_counselling_platform)  /projects/writenow
+/projects/jetblackpearl%EF%BB%BF_(musicians_website)    /projects/jetblackpearl
+/projects/alternative_birder%EF%BB%BF /projects/alternative-birder
+/projects/pulp_nation%EF%BB%BF:_documenting_life_on_paper/ /projects/pulpnation
+/projects/ctrip_x_shin_ambassador_campaign%EF%BB%BF /projects/ctrip
