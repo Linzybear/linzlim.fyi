@@ -309,7 +309,7 @@ function make( html, summarize = true ) {
     })
 
     fs.writeFileSync( `public/index.html`, newHtml );
-    fs.writeFileSync( `public/__redirects`, makeRedirects() );
+    fs.writeFileSync( `public/_redirects`, makeRedirects() );
 }
 if ( fs.existsSync( PUBLIC_ASSETS_DIRECTORY ) ) {
     fs.rmdirSync( PUBLIC_ASSETS_DIRECTORY, { recursive: true, force: true } );
