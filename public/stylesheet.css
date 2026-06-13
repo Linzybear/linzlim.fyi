@@ -209,7 +209,7 @@ a:hover {
     position: relative;
     max-width: 100%;
 }
-.gallery__carousel {
+.gallery--compact .gallery__carousel {
     display: flex;
     gap: 12px;
     overflow-x: auto;
@@ -218,7 +218,7 @@ a:hover {
     scrollbar-width: none;
 }
 
-.gallery__fade {
+.gallery--compact  .gallery__fade {
     position: absolute;
     top: 0px;
     right: 0px;
