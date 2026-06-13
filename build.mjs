@@ -1,10 +1,13 @@
 import fs from 'fs';
 import sharp from 'sharp';
+import { execSync } from 'child_process';
 
-const PUBLIC_ASSETS_DIRECTORY = `public/assets`
-const PUBLIC_PROJECT_DIR = `public/projects`;
+const PUBLIC_DIRECTORY = 'public';
+const PUBLIC_ASSETS_DIRECTORY = `${PUBLIC_DIRECTORY}/assets`
+const PUBLIC_PROJECT_DIR = `${PUBLIC_DIRECTORY}/projects`;
 const template = fs.readFileSync('template.html').toString();
 const pageTemplate = fs.readFileSync('pageTemplate.html').toString();
+const redirects = {};
 
 const getPagePathFromSlugTitle = ( title ) =>
     `${title.replace(/[→&:/"']/g, '' ).replace(/ /g, '_' )}.html`;
@@ -22,7 +25,9 @@ function generateLinksHtml( links ) {
          `<li>${ embed ? embed : linkOrSpan( title, href )}</li>`).join("\n");
 }
 function generateTitleHTML( title, href ) {
-    let target = `target="_blank"`;
+    let target = href.indexOf( 'https' ) === 0 ||
+        href.indexOf( '//' ) === 0 ? `target="_blank"` :
+        '';
     if ( !href ) {
         href = `/projects/${getPagePathFromSlugTitle(title)}`;
         target = '';
@@ -161,10 +166,11 @@ function makeSlugFromProjectFolder( projectPath, thumbPath, summarize = true ) {
         } else if ( file === 'links' ) {
             slug.links = makeLinks(`${projectPath}/links`);
         } else if ( file === 'description.txt' ) {
+            const projectFolder = projectPath.split('/').slice( -1 )[0];
             const meta = fs.readFileSync( `${projectPath}/${file}` ).toString().split('\n');
             slug.duration = meta[0];
             slug.title = meta[1];
-            slug.href = meta[2];
+            slug.href = meta[2] || `/projects/${projectFolder}.html`;
             const slugText = meta.slice(3);
             const fullDescription = slugText.join("\n");
             const slugDescription = slugText.filter((t) => t)[0] || '';
@@ -237,8 +243,8 @@ function makeIndexBodyAndSubPages( directory, header = '', summarize = true ) {
         })
     }
     slugs.forEach((slug) => {
-        const path = getPagePathFromSlugTitle( slug.title );
-        fs.writeFileSync( `${PUBLIC_PROJECT_DIR}/${path}`, makeSubpage(slug, header) );
+        redirects[getPagePathFromSlugTitle( slug.title )] = slug.href;
+        fs.writeFileSync( `${PUBLIC_DIRECTORY}/${slug.href}`, makeSubpage(slug, header) );
     });
     return slugs
         .sort((a, b) => {
@@ -263,6 +269,32 @@ function makeIndexBodyAndSubPages( directory, header = '', summarize = true ) {
         .join("\n");
 }
 
+function getRedirectsFromGitHistory() {
+    try {
+        const out = execSync('git log --find-renames --diff-filter=R --name-status --pretty=format:%H -- src/experiences', { encoding: 'utf8' });
+        const lines = out.split(/\r?\n/);
+        lines.forEach((line) => {
+            const m = line.match(/^R\d+\t(.+)\t(.+)$/);
+            if (!m) return;
+            const oldPath = m[1];
+            const newPath = m[2];
+            if (!oldPath.startsWith('src/experiences')) return;
+            const oldPathFolder = oldPath.split( '/' )[ 2 ];
+            const newPathFolder = newPath.split( '/' )[ 2 ];
+            redirects[ `/projects/${oldPathFolder}` ] = `/projects/${newPathFolder}`;
+        });
+    } catch (e) {
+        console.warn('Unable to read git history for redirects:', e && e.message ? e.message : e);
+    }
+    return redirects;
+}
+
+function makeRedirects() {
+    const redirects = getRedirectsFromGitHistory();
+    return Object.keys( redirects )
+        .map( ( key ) => `${key}    ${redirects[key]}` ).join('\n') + '\n';
+}
+
 function make( html, summarize = true ) {
     let newHtml = html;
     // Function to get current filenames
@@ -277,6 +309,7 @@ function make( html, summarize = true ) {
     })
 
     fs.writeFileSync( `public/index.html`, newHtml );
+    fs.writeFileSync( `public/__redirects`, makeRedirects() );
 }
 if ( fs.existsSync( PUBLIC_ASSETS_DIRECTORY ) ) {
     fs.rmdirSync( PUBLIC_ASSETS_DIRECTORY, { recursive: true, force: true } );
