@@ -243,7 +243,9 @@ function makeIndexBodyAndSubPages( directory, header = '', summarize = true ) {
         })
     }
     slugs.forEach((slug) => {
-        redirects[`/projects/${getPagePathFromSlugTitle( slug.title )}`] = slug.href;
+        const slugPagePath = getPagePathFromSlugTitle( slug.title );
+        redirects[`/projects/${slugPagePath}`] = slug.href;
+        redirects[`/projects/${slugPagePath.replace('.html', '')}`] = slug.href;
         fs.writeFileSync( `${PUBLIC_DIRECTORY}/${slug.href}`, makeSubpage(slug, header) );
     });
     return slugs
@@ -281,7 +283,9 @@ function getRedirectsFromGitHistory() {
             if (!oldPath.startsWith('src/experiences')) return;
             const oldPathFolder = oldPath.split( '/' )[ 2 ];
             const newPathFolder = newPath.split( '/' )[ 2 ];
-            redirects[ `/projects/${oldPathFolder}` ] = `/projects/${newPathFolder}`;
+            if ( oldPathFolder !== newPathFolder ) {
+                redirects[ `/projects/${oldPathFolder}` ] = `/projects/${newPathFolder}`;
+            }
         });
     } catch (e) {
         console.warn('Unable to read git history for redirects:', e && e.message ? e.message : e);
