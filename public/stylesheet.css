@@ -206,10 +206,29 @@ a:hover {
     /* hide scrollabr */
     -ms-overflow-style: none;
     scrollbar-width: none;
-    --mask: conic-gradient(from -135deg at right,#0000,#000 1deg 89deg,#0000 90deg) 50%/100% 60px;
-    -webkit-mask: var(--mask);
-            mask: var(--mask);
+    position: relative;
+    max-width: 100%;
 }
+.gallery--compact .gallery__carousel {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 4px 100px 4px 0;
+    scrollbar-width: none;
+}
+
+.gallery--compact  .gallery__fade {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    width: 60px;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 1));
+    pointer-events: none;
+    opacity: 1;
+}
+
 .gallery--full {
     flex-flow: column;
     overflow: hidden;
